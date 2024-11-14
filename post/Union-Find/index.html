@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="zh-TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Union-Find | Piau 的筆記本</title><meta name="author" content="Piau"><meta name="copyright" content="Piau"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Union-Find (Disjoint-Set) 從 Disjoint-Set 這個名字來看 這個資料結構是由許多 Set（集合） 所組成，並且彼此 Disjoint（互斥） 通常會用來解決 集合合併 和 集合查找 的問題 要點 功能  union：合併，將兩個集合合併為一個集合 find：查找某節點的根節點，用來確定該節點屬於哪一個集合   可以針對其他的需求實作 例如：size（查詢集合中有">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Union-Find">
-<meta property="og:url" content="http://piautw.github.io/post/Union-Find/index.html">
+<meta property="og:url" content="http://piau3425.github.io/post/Union-Find/index.html">
 <meta property="og:site_name" content="Piau 的筆記本">
 <meta property="og:description" content="Union-Find (Disjoint-Set) 從 Disjoint-Set 這個名字來看 這個資料結構是由許多 Set（集合） 所組成，並且彼此 Disjoint（互斥） 通常會用來解決 集合合併 和 集合查找 的問題 要點 功能  union：合併，將兩個集合合併為一個集合 find：查找某節點的根節點，用來確定該節點屬於哪一個集合   可以針對其他的需求實作 例如：size（查詢集合中有">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="http://piautw.github.io/img/avatar.png">
+<meta property="og:image" content="http://piau3425.github.io/img/avatar.png">
 <meta property="article:published_time" content="2024-11-14T11:43:17.638Z">
 <meta property="article:modified_time" content="2024-11-14T13:41:08.084Z">
 <meta property="article:author" content="Piau">
@@ -13,7 +13,7 @@
 <meta property="article:tag" content="競程">
 <meta property="article:tag" content="資料結構">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://piautw.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piautw.github.io/post/Union-Find/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+<meta name="twitter:image" content="http://piau3425.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piau3425.github.io/post/Union-Find/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
     (() => {
       
     const saveToLocal = {

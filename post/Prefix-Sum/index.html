@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="zh-TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Prefix-Sum | Piau 的筆記本</title><meta name="author" content="Piau"><meta name="copyright" content="Piau"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="前綴和 前綴和是對於數列的一種預處理 經過 O(n) 初始化過後可以在 O(1) 就取得 [a, b] 的區間和 一維前綴和 要點 功能  query：查詢某範圍的區間和  觀念 一維前綴和就是將第 N 項的數字改為 N 之前的所有總和 之後每次進行查詢我們就只需要輸出第 b 項數字減去第 a - 1 項數字  為了避免 a - 1 會減到負數 我們需要將索引改成 1-based，並將第 0 項數">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Prefix-Sum">
-<meta property="og:url" content="http://piautw.github.io/post/Prefix-Sum/index.html">
+<meta property="og:url" content="http://piau3425.github.io/post/Prefix-Sum/index.html">
 <meta property="og:site_name" content="Piau 的筆記本">
 <meta property="og:description" content="前綴和 前綴和是對於數列的一種預處理 經過 O(n) 初始化過後可以在 O(1) 就取得 [a, b] 的區間和 一維前綴和 要點 功能  query：查詢某範圍的區間和  觀念 一維前綴和就是將第 N 項的數字改為 N 之前的所有總和 之後每次進行查詢我們就只需要輸出第 b 項數字減去第 a - 1 項數字  為了避免 a - 1 會減到負數 我們需要將索引改成 1-based，並將第 0 項數">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="http://piautw.github.io/img/avatar.png">
+<meta property="og:image" content="http://piau3425.github.io/img/avatar.png">
 <meta property="article:published_time" content="2024-11-12T13:06:11.832Z">
 <meta property="article:modified_time" content="2024-11-14T14:50:59.750Z">
 <meta property="article:author" content="Piau">
@@ -13,7 +13,7 @@
 <meta property="article:tag" content="競程">
 <meta property="article:tag" content="資料結構">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://piautw.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piautw.github.io/post/Prefix-Sum/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+<meta name="twitter:image" content="http://piau3425.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piau3425.github.io/post/Prefix-Sum/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
     (() => {
       
     const saveToLocal = {

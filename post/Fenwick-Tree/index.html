@@ -1,11 +1,11 @@
 <!DOCTYPE html><html lang="zh-TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fenwick-Tree | Piau 的筆記本</title><meta name="author" content="Piau"><meta name="copyright" content="Piau"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Fenwick Tree (Binary Indexed Tree) 相較於前綴和只能用來查詢區間和 當我們想要修改某項數值時，就需要重新處理一次 前綴和的 O(1) 求區間和，無法滿足大量的修改操作 這時候可以使用 Fenwick Tree 來快速的修改、求總和 Fenwick Tree 可以在 O(n) 的時間初始化，並且在 O(log n) 的時間查詢區間和、修改其中一項元素的值  這種資料">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fenwick-Tree">
-<meta property="og:url" content="http://piautw.github.io/post/Fenwick-Tree/index.html">
+<meta property="og:url" content="http://piau3425.github.io/post/Fenwick-Tree/index.html">
 <meta property="og:site_name" content="Piau 的筆記本">
 <meta property="og:description" content="Fenwick Tree (Binary Indexed Tree) 相較於前綴和只能用來查詢區間和 當我們想要修改某項數值時，就需要重新處理一次 前綴和的 O(1) 求區間和，無法滿足大量的修改操作 這時候可以使用 Fenwick Tree 來快速的修改、求總和 Fenwick Tree 可以在 O(n) 的時間初始化，並且在 O(log n) 的時間查詢區間和、修改其中一項元素的值  這種資料">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="http://piautw.github.io/img/avatar.png">
+<meta property="og:image" content="http://piau3425.github.io/img/avatar.png">
 <meta property="article:published_time" content="2024-11-13T14:30:01.385Z">
 <meta property="article:modified_time" content="2024-11-14T14:49:27.737Z">
 <meta property="article:author" content="Piau">
@@ -13,7 +13,7 @@
 <meta property="article:tag" content="競程">
 <meta property="article:tag" content="資料結構">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://piautw.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piautw.github.io/post/Fenwick-Tree/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+<meta name="twitter:image" content="http://piau3425.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piau3425.github.io/post/Fenwick-Tree/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
     (() => {
       
     const saveToLocal = {
