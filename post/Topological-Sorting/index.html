@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Topological-Sorting | Piau 的筆記本</title><meta name="author" content="Piau"><meta name="copyright" content="Piau"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Topological-Sorting（拓樸排序） 拓樸排序是 只有祖先都被走訪過的節點 才能被走訪 通常會在有向圖中的邊，用來陳述 A, B 的優先性 也就是當 A → B 時，代表 A 先被走訪後才能走訪 B 要點 觀念 此演算法需要 一維陣列：儲存某節點的未訪問祖先數量 二維陣列：儲存圖（鄰接串列） 佇列：儲存祖先已走訪完畢的節點（用佇列保持其順序性） 先找到沒有父節點的節點作為起始節點 (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Topological-Sorting">
+<meta property="og:url" content="http://piau3425.github.io/post/Topological-Sorting/index.html">
+<meta property="og:site_name" content="Piau 的筆記本">
+<meta property="og:description" content="Topological-Sorting（拓樸排序） 拓樸排序是 只有祖先都被走訪過的節點 才能被走訪 通常會在有向圖中的邊，用來陳述 A, B 的優先性 也就是當 A → B 時，代表 A 先被走訪後才能走訪 B 要點 觀念 此演算法需要 一維陣列：儲存某節點的未訪問祖先數量 二維陣列：儲存圖（鄰接串列） 佇列：儲存祖先已走訪完畢的節點（用佇列保持其順序性） 先找到沒有父節點的節點作為起始節點 (">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="http://piau3425.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-11-14T11:41:33.799Z">
+<meta property="article:modified_time" content="2024-11-15T08:59:09.987Z">
+<meta property="article:author" content="Piau">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="競程">
+<meta property="article:tag" content="演算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://piau3425.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://piau3425.github.io/post/Topological-Sorting/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到符合您查詢的內容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製失敗',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: Piau","link":"連結: ","source":"來源: Piau 的筆記本","info":"著作權歸作者所有。如需商業轉載，請聯絡作者獲得授權，非商業轉載請註明出處。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '載入更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Topological-Sorting',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-shiki-plugin@latest/lib/codeblock.css">
+<style>:root{--hl-color:#e1e4e8;--hl-bg:#24292e;--hltools-bg:#1f2428;--hltools-color:#c5c5c5;--hlnumber-bg:#24292e;--hlnumber-color:#444d56;--hlscrollbar-bg:#32383e;--hlexpand-bg:linear-gradient(180deg,rgba(36,41,46,0.1),rgba(36,41,46,0.9))}</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/home_banner.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">標籤</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/tags/"><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/about-me/"><span> 關於我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Piau 的筆記本</span></a><a class="nav-page-title" href="/"><span class="site-name">Topological-Sorting</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜尋</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/tags/"><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/about-me/"><span> 關於我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Topological-Sorting</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2024-11-14T11:41:33.799Z" title="發表於 2024-11-14 19:41:33">2024-11-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2024-11-15T08:59:09.987Z" title="更新於 2024-11-15 16:59:09">2024-11-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%B3%87%E8%A8%8A%E9%A1%9E/">資訊類</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">總字數:</span><span class="word-count">600</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀時間:</span><span>2分鐘</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>Topological-Sorting（拓樸排序）</h1>
+<p>拓樸排序是 <em>只有祖先都被走訪過的節點</em> 才能被走訪<br>
+通常會在有向圖中的邊，用來陳述 A, B 的優先性<br>
+也就是當 A → B 時，代表 A 先被走訪後才能走訪 B</p>
+<h2 id="要點">要點</h2>
+<p><strong>觀念</strong></p>
+<p>此演算法需要<br>
+一維陣列：儲存某節點的未訪問祖先數量<br>
+二維陣列：儲存圖（鄰接串列）<br>
+佇列：儲存祖先已走訪完畢的節點（用佇列保持其順序性）</p>
+<p>先找到沒有父節點的節點作為起始節點 (x) 將其放入佇列中<br>
+對所有 x → ? 的 ? 節點，將其一維陣列減 1<br>
+同時檢查，若 ? 節點的祖先已全部走訪完畢，則將 ? 放入佇列中</p>
+<blockquote>
+<p>本文默認輸入的有向圖圍為單連通<br>
+若想要檢查該圖是否存在環，可以檢查拓樸排序的輸出有無包含所有節點</p>
+</blockquote>
+<h2 id="實作">實作</h2>
+<p><strong>宣告陣列</strong></p>
+<p>一維陣列 (w)<br>
+二維陣列 (g)</p>
+<figure class="shiki cpp"><div class='codeblock'><div class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div><div class="code"><pre class="shiki github-dark"><code><span class="line"><span style="color: #6A737D">// n 為節點數量</span></span>
+<span class="line"><span style="color: #B392F0">vector</span><span style="color: #E1E4E8">&lt;</span><span style="color: #B392F0">vector</span><span style="color: #E1E4E8">&lt;</span><span style="color: #F97583">int</span><span style="color: #E1E4E8">&gt;&gt; </span><span style="color: #B392F0">g</span><span style="color: #E1E4E8">(</span><span style="color: #B392F0">n</span><span style="color: #E1E4E8">);</span></span>
+<span class="line"><span style="color: #B392F0">vector</span><span style="color: #E1E4E8">&lt;</span><span style="color: #F97583">int</span><span style="color: #E1E4E8">&gt; </span><span style="color: #B392F0">w</span><span style="color: #E1E4E8">(</span><span style="color: #B392F0">n</span><span style="color: #E1E4E8">, </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">);</span></span></code></pre></div></div></figure>
+<p><strong>路徑數量</strong></p>
+<p>圖以鄰接串列的方式儲存<br>
+設某節點的未走訪父節點為該節點的權重</p>
+<figure class="shiki cpp"><div class='codeblock'><div class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div><div class="code"><pre class="shiki github-dark"><code><span class="line"><span style="color: #6A737D">// m 為路徑數量</span></span>
+<span class="line"><span style="color: #F97583">while</span><span style="color: #E1E4E8"> (m</span><span style="color: #F97583">--</span><span style="color: #E1E4E8">) {</span></span>
+<span class="line"><span style="color: #E1E4E8">    cin </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> a </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> b;</span></span>
+<span class="line"><span style="color: #E1E4E8">    g[a].</span><span style="color: #B392F0">push_back</span><span style="color: #E1E4E8">(b);</span></span>
+<span class="line"><span style="color: #E1E4E8">    w[b]</span><span style="color: #F97583">++</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"><span style="color: #E1E4E8">}</span></span></code></pre></div></div></figure>
+<p><strong>排序</strong></p>
+<p>先創建一個佇列為 q<br>
+利用 for 迴圈尋找沒有父節點的初始節點，將其放入佇列<br>
+取出最前面的元素，並且將所有與該元素單向連通的節點權重減 1<br>
+檢查該連通的節點權重減 1 後為 0，將其放入佇列<br>
+利用 while 迴圈直到佇列內沒有元素為止</p>
+<figure class="shiki cpp"><div class='codeblock'><div class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div><div class="code"><pre class="shiki github-dark"><code><span class="line"><span style="color: #E1E4E8">queue</span><span style="color: #F97583">&lt;int&gt;</span><span style="color: #E1E4E8"> q;</span></span>
+<span class="line"><span style="color: #F97583">for</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">int</span><span style="color: #E1E4E8"> i </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">; i </span><span style="color: #F97583">&lt;</span><span style="color: #E1E4E8"> n; i</span><span style="color: #F97583">++</span><span style="color: #E1E4E8">) </span><span style="color: #F97583">if</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">!</span><span style="color: #E1E4E8">w[i]) q.</span><span style="color: #B392F0">push</span><span style="color: #E1E4E8">(i);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F97583">while</span><span style="color: #E1E4E8"> (q.</span><span style="color: #B392F0">size</span><span style="color: #E1E4E8">()) {</span></span>
+<span class="line"><span style="color: #E1E4E8">    cout </span><span style="color: #F97583">&lt;&lt;</span><span style="color: #E1E4E8"> q.</span><span style="color: #B392F0">front</span><span style="color: #E1E4E8">() </span><span style="color: #F97583">&lt;&lt;</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">&#39; &#39;</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"><span style="color: #E1E4E8">    </span><span style="color: #F97583">for</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">auto</span><span style="color: #E1E4E8"> i : g[q.</span><span style="color: #B392F0">front</span><span style="color: #E1E4E8">()]) </span><span style="color: #F97583">if</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">!</span><span style="color: #E1E4E8">(</span><span style="color: #F97583">--</span><span style="color: #E1E4E8">w[i])) q.</span><span style="color: #B392F0">push</span><span style="color: #E1E4E8">(i);</span></span>
+<span class="line"><span style="color: #E1E4E8">    q.</span><span style="color: #B392F0">pop</span><span style="color: #E1E4E8">();</span></span>
+<span class="line"><span style="color: #E1E4E8">}</span></span></code></pre></div></div></figure>
+<h2 id="範例">範例</h2>
+<figure class="shiki cpp"><div class='codeblock'><div class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></div><div class="code"><pre class="shiki github-dark"><code><span class="line"><span style="color: #6A737D">// n 為節點數量，m 為路徑數量</span></span>
+<span class="line"><span style="color: #F97583">#include</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">&lt;bits/stdc++.h&gt;</span></span>
+<span class="line"><span style="color: #F97583">using</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">namespace</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">std</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #F97583">int</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">main</span><span style="color: #E1E4E8">() {</span></span>
+<span class="line"><span style="color: #E1E4E8">    </span><span style="color: #F97583">int</span><span style="color: #E1E4E8"> n, m, a, b;</span></span>
+<span class="line"><span style="color: #E1E4E8">    </span><span style="color: #F97583">while</span><span style="color: #E1E4E8"> (cin </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> n </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> m, (n </span><span style="color: #F97583">||</span><span style="color: #E1E4E8"> m)) {</span></span>
+<span class="line"><span style="color: #E1E4E8">        vector</span><span style="color: #F97583">&lt;</span><span style="color: #E1E4E8">vector</span><span style="color: #F97583">&lt;int&gt;&gt;</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">g</span><span style="color: #E1E4E8">(n);</span></span>
+<span class="line"><span style="color: #E1E4E8">        vector</span><span style="color: #F97583">&lt;int&gt;</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">w</span><span style="color: #E1E4E8">(n, </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">);</span></span>
+<span class="line"><span style="color: #E1E4E8">        </span></span>
+<span class="line"><span style="color: #E1E4E8">        </span><span style="color: #F97583">while</span><span style="color: #E1E4E8"> (m</span><span style="color: #F97583">--</span><span style="color: #E1E4E8">) {</span></span>
+<span class="line"><span style="color: #E1E4E8">            cin </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> a </span><span style="color: #F97583">&gt;&gt;</span><span style="color: #E1E4E8"> b;</span></span>
+<span class="line"><span style="color: #E1E4E8">            g[a].</span><span style="color: #B392F0">push_back</span><span style="color: #E1E4E8">(b);</span></span>
+<span class="line"><span style="color: #E1E4E8">            w[b]</span><span style="color: #F97583">++</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"><span style="color: #E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #E1E4E8">        queue</span><span style="color: #F97583">&lt;int&gt;</span><span style="color: #E1E4E8"> q;</span></span>
+<span class="line"><span style="color: #E1E4E8">        </span><span style="color: #F97583">for</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">int</span><span style="color: #E1E4E8"> i </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">; i </span><span style="color: #F97583">&lt;</span><span style="color: #E1E4E8"> n; i</span><span style="color: #F97583">++</span><span style="color: #E1E4E8">) </span><span style="color: #F97583">if</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">!</span><span style="color: #E1E4E8">w[i]) q.</span><span style="color: #B392F0">push</span><span style="color: #E1E4E8">(i);</span></span>
+<span class="line"><span style="color: #E1E4E8">        </span></span>
+<span class="line"><span style="color: #E1E4E8">        </span><span style="color: #F97583">while</span><span style="color: #E1E4E8"> (q.</span><span style="color: #B392F0">size</span><span style="color: #E1E4E8">()) {</span></span>
+<span class="line"><span style="color: #E1E4E8">            cout </span><span style="color: #F97583">&lt;&lt;</span><span style="color: #E1E4E8"> q.</span><span style="color: #B392F0">front</span><span style="color: #E1E4E8">() </span><span style="color: #F97583">&lt;&lt;</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">&#39; &#39;</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"><span style="color: #E1E4E8">            </span><span style="color: #F97583">for</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">auto</span><span style="color: #E1E4E8"> i : g[q.</span><span style="color: #B392F0">front</span><span style="color: #E1E4E8">()]) </span><span style="color: #F97583">if</span><span style="color: #E1E4E8"> (</span><span style="color: #F97583">!</span><span style="color: #E1E4E8">(</span><span style="color: #F97583">--</span><span style="color: #E1E4E8">w[i])) q.</span><span style="color: #B392F0">push</span><span style="color: #E1E4E8">(i);</span></span>
+<span class="line"><span style="color: #E1E4E8">            q.</span><span style="color: #B392F0">pop</span><span style="color: #E1E4E8">();</span></span>
+<span class="line"><span style="color: #E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #E1E4E8">        cout </span><span style="color: #F97583">&lt;&lt;</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">&#39;</span><span style="color: #79B8FF">\n</span><span style="color: #9ECBFF">&#39;</span><span style="color: #E1E4E8">;</span></span>
+<span class="line"><span style="color: #E1E4E8">    }</span></span>
+<span class="line"><span style="color: #E1E4E8">}</span></span></code></pre></div></div></figure></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/%E7%AB%B6%E7%A8%8B/">競程</a><a class="post-meta__tags" href="/tags/%E6%BC%94%E7%AE%97%E6%B3%95/">演算法</a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Piau</div><div class="author-info-description">一個剛剛接觸資訊領域的大一新生 <br> 正在接觸競程和資安的領域 <br> 頭像的貓咪叫做 Haru</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">標籤</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Topological-Sorting（拓樸排序）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E9%BB%9E"><span class="toc-number">1.1.</span> <span class="toc-text">要點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">範例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/Union-Find/" title="Union-Find">Union-Find</a><time datetime="2024-11-14T11:43:17.638Z" title="發表於 2024-11-14 19:43:17">2024-11-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/Topological-Sorting/" title="Topological-Sorting">Topological-Sorting</a><time datetime="2024-11-14T11:41:33.799Z" title="發表於 2024-11-14 19:41:33">2024-11-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/Quick-Notes/" title="Quick-Notes">Quick-Notes</a><time datetime="2024-11-14T10:14:24.371Z" title="發表於 2024-11-14 18:14:24">2024-11-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/Fenwick-Tree/" title="Fenwick-Tree">Fenwick-Tree</a><time datetime="2024-11-13T14:30:01.385Z" title="發表於 2024-11-13 22:30:01">2024-11-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/Prefix-Sum/" title="Prefix-Sum">Prefix-Sum</a><time datetime="2024-11-12T13:06:11.832Z" title="發表於 2024-11-12 21:06:11">2024-11-12</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="footer_custom_text">Copyright ©2024 by Piau. All rights reserved.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日夜模式切換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂端"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script async src="/js/title.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜尋</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  資料載入中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜尋文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+  <script>
+  const CODE_CONFIG = {
+    beautify: undefined,
+    highlightCopy: undefined,
+    highlightLang: undefined,
+    highlightHeightLimit: undefined,
+    isHighlightShrink: undefined,
+    copy: {
+      success: 'undefined',
+      error: 'undefined',
+      noSupport: 'undefined',
+    }
+  };
+  console.log(
+    `%c hexo-shiki-plugin %c v1.0.27 %c https://github.com/nova1751/hexo-shiki-plugin`,
+    "color: #fff; background: #5f5f5f",
+    "color: #fff; background: #80c8f8",
+    ""
+  );
+  </script>
+  <!-- hexo injector body_end end --></body></html>
